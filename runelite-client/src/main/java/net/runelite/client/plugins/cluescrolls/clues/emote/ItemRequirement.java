@@ -29,7 +29,7 @@ import net.runelite.api.Item;
 
 public interface ItemRequirement
 {
-	boolean fulfilledBy(Item[] items);
+	boolean fulfilledBy(Client client, Item[] items);
 
 	String getCollectiveName(Client client);
 }

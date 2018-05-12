@@ -29,11 +29,16 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Set;
 import lombok.Getter;
+import net.runelite.api.ItemID;
+import net.runelite.api.Varbits;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import static net.runelite.client.plugins.cluescrolls.ClueScrollOverlay.TITLED_CONTENT_COLOR;
 import net.runelite.client.plugins.cluescrolls.ClueScrollPlugin;
 import static net.runelite.client.plugins.cluescrolls.ClueScrollPlugin.SPADE_IMAGE;
+import net.runelite.client.plugins.cluescrolls.clues.emote.AnyVarItemRequirement;
+import net.runelite.client.plugins.cluescrolls.clues.emote.ItemRequirement;
+import net.runelite.client.plugins.cluescrolls.clues.emote.SingleItemRequirement;
 import net.runelite.client.ui.overlay.OverlayUtil;
 import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
@@ -42,6 +47,10 @@ import net.runelite.client.ui.overlay.components.TitleComponent;
 @Getter
 public class FairyRingClue extends ClueScroll implements TextClueScroll, LocationClueScroll
 {
+	private static final ItemRequirement[] REQUIREMENTS = new ItemRequirement[]{
+		new AnyVarItemRequirement("Fairy Magic", new Varbits[]{Varbits.DIARY_LUMBRIDGE_ELITE}, new SingleItemRequirement(ItemID.DRAMEN_STAFF), new SingleItemRequirement(ItemID.LUNAR_STAFF),
+			SPADE)};
+
 	private static final Set<FairyRingClue> CLUES = ImmutableSet.of(
 		new FairyRingClue("A I R 2 3 3 1", new WorldPoint(2702, 3246, 0)),
 		new FairyRingClue("A I Q 0 4 4 0", new WorldPoint(3000, 3110, 0)),
@@ -103,5 +112,11 @@ public class FairyRingClue extends ClueScroll implements TextClueScroll, Locatio
 		}
 
 		return null;
+	}
+
+	@Override
+	public ItemRequirement[] itemRequirements()
+	{
+		return REQUIREMENTS;
 	}
 }

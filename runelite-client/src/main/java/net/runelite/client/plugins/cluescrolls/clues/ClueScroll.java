@@ -25,12 +25,23 @@
 package net.runelite.client.plugins.cluescrolls.clues;
 
 import java.awt.Graphics2D;
+import net.runelite.api.ItemID;
 import net.runelite.client.plugins.cluescrolls.ClueScrollPlugin;
+import net.runelite.client.plugins.cluescrolls.clues.emote.ItemRequirement;
+import net.runelite.client.plugins.cluescrolls.clues.emote.SingleItemRequirement;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
 public abstract class ClueScroll
 {
+	static final ItemRequirement[] NONE = new ItemRequirement[0];
+	static final ItemRequirement SPADE = new SingleItemRequirement(ItemID.SPADE);
+
 	public abstract void makeOverlayHint(PanelComponent panelComponent, ClueScrollPlugin plugin);
 
 	public abstract void makeWorldOverlayHint(Graphics2D graphics, ClueScrollPlugin plugin);
+
+	public ItemRequirement[] itemRequirements()
+	{
+		return NONE;
+	}
 }

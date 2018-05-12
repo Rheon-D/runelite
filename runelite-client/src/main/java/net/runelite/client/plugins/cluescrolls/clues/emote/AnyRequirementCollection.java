@@ -39,11 +39,11 @@ public class AnyRequirementCollection implements ItemRequirement
 	}
 
 	@Override
-	public boolean fulfilledBy(Item[] items)
+	public boolean fulfilledBy(Client client, Item[] items)
 	{
 		for (ItemRequirement requirement : requirements)
 		{
-			if (requirement.fulfilledBy(items))
+			if (requirement.fulfilledBy(client, items))
 			{
 				return true;
 			}

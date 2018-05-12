@@ -40,7 +40,7 @@ public class SlotLimitationRequirement implements ItemRequirement
 	}
 
 	@Override
-	public boolean fulfilledBy(Item[] items)
+	public boolean fulfilledBy(Client client, Item[] items)
 	{
 		for (EquipmentInventorySlot slot : slots)
 		{

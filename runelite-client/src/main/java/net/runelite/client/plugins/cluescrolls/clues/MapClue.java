@@ -45,6 +45,7 @@ import static net.runelite.client.plugins.cluescrolls.ClueScrollWorldOverlay.CLI
 import static net.runelite.client.plugins.cluescrolls.ClueScrollWorldOverlay.CLICKBOX_FILL_COLOR;
 import static net.runelite.client.plugins.cluescrolls.ClueScrollWorldOverlay.CLICKBOX_HOVER_BORDER_COLOR;
 import static net.runelite.client.plugins.cluescrolls.ClueScrollWorldOverlay.IMAGE_Z_OFFSET;
+import net.runelite.client.plugins.cluescrolls.clues.emote.ItemRequirement;
 import net.runelite.client.ui.overlay.OverlayUtil;
 import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
@@ -53,6 +54,8 @@ import net.runelite.client.ui.overlay.components.TitleComponent;
 @Getter
 public class MapClue extends ClueScroll implements ObjectClueScroll
 {
+	private static final ItemRequirement[] REQUIREMENTS = new ItemRequirement[]{SPADE};
+
 	private static final Set<MapClue> CLUES = ImmutableSet.of(
 		new MapClue(CLUE_SCROLL_EASY_12179, new WorldPoint(3300, 3291, 0)),
 		new MapClue(CLUE_SCROLL_EASY_2713, new WorldPoint(3166, 3361, 0)),
@@ -176,4 +179,5 @@ public class MapClue extends ClueScroll implements ObjectClueScroll
 
 		return null;
 	}
+
 }

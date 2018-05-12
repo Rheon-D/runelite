@@ -41,7 +41,7 @@ public class RangeItemRequirement implements ItemRequirement
 	}
 
 	@Override
-	public boolean fulfilledBy(Item[] items)
+	public boolean fulfilledBy(Client client, Item[] items)
 	{
 		for (Item item : items)
 		{

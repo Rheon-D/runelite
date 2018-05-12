@@ -128,8 +128,8 @@ import static net.runelite.api.ItemID.BROWN_APRON;
 import static net.runelite.api.ItemID.BROWN_HEADBAND;
 import static net.runelite.api.ItemID.BRUISE_BLUE_SNELM_3343;
 import static net.runelite.api.ItemID.CAPE_OF_LEGENDS;
-import static net.runelite.api.ItemID.CASTLE_WARS_BRACELET3;
 import static net.runelite.api.ItemID.CASTLE_WARS_BRACELET1;
+import static net.runelite.api.ItemID.CASTLE_WARS_BRACELET3;
 import static net.runelite.api.ItemID.CLIMBING_BOOTS;
 import static net.runelite.api.ItemID.COIF;
 import static net.runelite.api.ItemID.COMBAT_BRACELET;
@@ -560,11 +560,11 @@ public class EmoteClue extends ClueScroll implements TextClueScroll, LocationClu
 		return new SlotLimitationRequirement(description, slots);
 	}
 
-	private String text;
-	private WorldPoint location;
-	private Emote firstEmote;
-	private Emote secondEmote;
-	private ItemRequirement[] itemRequirements;
+	private final String text;
+	private final WorldPoint location;
+	private final Emote firstEmote;
+	private final Emote secondEmote;
+	private final ItemRequirement[] itemRequirements;
 
 	private EmoteClue(String text, WorldPoint location, Emote firstEmote, ItemRequirement... itemRequirements)
 	{
@@ -619,7 +619,7 @@ public class EmoteClue extends ClueScroll implements TextClueScroll, LocationClu
 
 			for (ItemRequirement requirement : getItemRequirements())
 			{
-				boolean found = requirement.fulfilledBy(items);
+				boolean found = requirement.fulfilledBy(plugin.getClient(), items);
 
 				panelComponent.getChildren().add(LineComponent.builder()
 					.left(requirement.getCollectiveName(plugin.getClient()))

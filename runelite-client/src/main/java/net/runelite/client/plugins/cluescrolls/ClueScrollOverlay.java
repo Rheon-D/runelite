@@ -26,21 +26,27 @@
  */
 package net.runelite.client.plugins.cluescrolls;
 
+import com.google.common.base.MoreObjects;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import javax.inject.Inject;
+import net.runelite.api.Item;
 import net.runelite.client.plugins.cluescrolls.clues.ClueScroll;
+import net.runelite.client.plugins.cluescrolls.clues.emote.ItemRequirement;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayPriority;
+import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
 public class ClueScrollOverlay extends Overlay
 {
 	public static final Color TITLED_CONTENT_COLOR = new Color(190, 190, 190);
+	private static final Item[] EMPTY = new Item[0];
 
 	private final ClueScrollPlugin plugin;
 	private final PanelComponent panelComponent = new PanelComponent();
+
 
 	@Inject
 	public ClueScrollOverlay(ClueScrollPlugin plugin)
@@ -62,6 +68,23 @@ public class ClueScrollOverlay extends Overlay
 		panelComponent.getChildren().clear();
 
 		clue.makeOverlayHint(panelComponent, plugin);
+
+		if (clue.itemRequirements().length > 0)
+		{
+			Item[] inventory = MoreObjects.firstNonNull(plugin.getInventoryItems(), EMPTY);
+			Item[] equipment = MoreObjects.firstNonNull(plugin.getEquippedItems(), EMPTY);
+
+			for (ItemRequirement requirement : clue.itemRequirements())
+			{
+				if (!requirement.fulfilledBy(plugin.getClient(), inventory) && !requirement.fulfilledBy(plugin.getClient(), equipment))
+				{
+					panelComponent.getChildren().add(LineComponent.builder()
+						.leftColor(Color.RED)
+						.left(String.format("Missing %s", requirement.getCollectiveName(plugin.getClient())))
+						.build());
+				}
+			}
+		}
 
 		return panelComponent.render(graphics);
 	}

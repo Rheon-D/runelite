@@ -113,6 +113,9 @@ public class ClueScrollPlugin extends Plugin
 	private Item[] equippedItems;
 
 	@Getter
+	private Item[] inventoryItems;
+
+	@Getter
 	private Instant clueTimeout;
 
 	@Inject
@@ -190,7 +193,7 @@ public class ClueScrollPlugin extends Plugin
 
 		if (clue instanceof LocationsClueScroll)
 		{
-			((LocationsClueScroll)clue).update(event.getMessage(), this);
+			((LocationsClueScroll) clue).update(event.getMessage(), this);
 		}
 
 		if (!event.getMessage().equals("The strange device cools as you find your treasure.")
@@ -257,6 +260,21 @@ public class ClueScrollPlugin extends Plugin
 		npcsToMark = null;
 		objectsToMark = null;
 		equippedItems = null;
+		inventoryItems = null;
+
+		ItemContainer container = client.getItemContainer(InventoryID.INVENTORY);
+
+		if (container != null)
+		{
+			inventoryItems = container.getItems();
+		}
+
+		container = client.getItemContainer(InventoryID.EQUIPMENT);
+
+		if (container != null)
+		{
+			equippedItems = container.getItems();
+		}
 
 		if (clue instanceof LocationsClueScroll)
 		{
@@ -334,25 +352,6 @@ public class ClueScrollPlugin extends Plugin
 			}
 		}
 
-		if (clue instanceof EmoteClue)
-		{
-			ItemContainer container = client.getItemContainer(InventoryID.EQUIPMENT);
-			
-			if (container != null)
-			{
-				equippedItems = container.getItems();
-			}
-		}
-
-		if (clue instanceof CoordinateClue)
-		{
-			ItemContainer container = client.getItemContainer(InventoryID.INVENTORY);
-
-			if (container != null)
-			{
-				equippedItems = container.getItems();
-			}
-		}
 
 		ClueScroll clue = findClueScroll();
 
@@ -412,10 +411,10 @@ public class ClueScrollPlugin extends Plugin
 		{
 			// Remove line breaks and also the rare occasion where there are double line breaks
 			String text = Text.removeTags(clueScrollText.getText()
-					.replaceAll("-<br>", "-")
-					.replaceAll("<br>", " ")
-					.replaceAll("[ ]+", " ")
-					.toLowerCase());
+				.replaceAll("-<br>", "-")
+				.replaceAll("<br>", " ")
+				.replaceAll("[ ]+", " ")
+				.toLowerCase());
 
 			if (clue != null && clue instanceof TextClueScroll)
 			{

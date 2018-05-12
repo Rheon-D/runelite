@@ -41,6 +41,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import net.runelite.api.ItemID;
 import net.runelite.api.NPC;
 import net.runelite.api.Perspective;
 import net.runelite.api.coords.LocalPoint;
@@ -50,6 +51,8 @@ import net.runelite.client.plugins.cluescrolls.ClueScrollPlugin;
 import static net.runelite.client.plugins.cluescrolls.ClueScrollPlugin.CLUE_SCROLL_IMAGE;
 import static net.runelite.client.plugins.cluescrolls.ClueScrollPlugin.SPADE_IMAGE;
 import static net.runelite.client.plugins.cluescrolls.ClueScrollWorldOverlay.IMAGE_Z_OFFSET;
+import net.runelite.client.plugins.cluescrolls.clues.emote.ItemRequirement;
+import net.runelite.client.plugins.cluescrolls.clues.emote.SingleItemRequirement;
 import net.runelite.client.plugins.cluescrolls.clues.hotcold.HotColdArea;
 import net.runelite.client.plugins.cluescrolls.clues.hotcold.HotColdLocation;
 import net.runelite.client.ui.overlay.OverlayUtil;
@@ -61,6 +64,7 @@ import net.runelite.client.ui.overlay.components.TitleComponent;
 @RequiredArgsConstructor
 public class HotColdClue extends ClueScroll implements LocationClueScroll, LocationsClueScroll, TextClueScroll, NpcClueScroll
 {
+	private static final ItemRequirement[] REQUIREMENTS = new ItemRequirement[]{SPADE, new SingleItemRequirement(ItemID.STRANGE_DEVICE)};
 	private static final Pattern INITIAL_STRANGE_DEVICE_MESSAGE = Pattern.compile("The device is (.*)");
 	private static final Pattern STRANGE_DEVICE_MESSAGE = Pattern.compile("The device is (.*), (.*) last time\\.");
 	private static final Pattern FINAL_STRANGE_DEVICE_MESSAGE = Pattern.compile("The device is visibly shaking.*");
@@ -70,7 +74,7 @@ public class HotColdClue extends ClueScroll implements LocationClueScroll, Locat
 			"Speak to Jorral to receive a strange device.");
 
 	// list of potential places to dig
-	private List<HotColdLocation> digLocations = new ArrayList<>();
+	private final List<HotColdLocation> digLocations = new ArrayList<>();
 	private final String text;
 	private final String npc;
 	private final String solution;
@@ -192,7 +196,7 @@ public class HotColdClue extends ClueScroll implements LocationClueScroll, Locat
 	public void makeWorldOverlayHint(Graphics2D graphics, ClueScrollPlugin plugin)
 	{
 		// when final location has been found
-		if (this.location != null)
+		if (location != null)
 		{
 			LocalPoint localLocation = LocalPoint.fromWorld(plugin.getClient(), getLocation());
 
@@ -248,7 +252,7 @@ public class HotColdClue extends ClueScroll implements LocationClueScroll, Locat
 	}
 
 	@Override
-	public void update(final String message, final ClueScrollPlugin plugin)
+	public void update(String message, ClueScrollPlugin plugin)
 	{
 		if (!message.startsWith("The device is"))
 		{
@@ -296,13 +300,13 @@ public class HotColdClue extends ClueScroll implements LocationClueScroll, Locat
 	@Override
 	public void reset()
 	{
-		this.lastWorldPoint = null;
+		lastWorldPoint = null;
 		digLocations.clear();
 	}
 
 	private void updatePossibleArea(WorldPoint currentWp, String temperature, String difference)
 	{
-		this.location = null;
+		location = null;
 
 		if (digLocations.size() == 0)
 		{
@@ -394,7 +398,7 @@ public class HotColdClue extends ClueScroll implements LocationClueScroll, Locat
 			return false;
 		}
 
-		WorldPoint p3 = new WorldPoint((int) r.getMinX(), (int)r.getMaxY(), 0);
+		WorldPoint p3 = new WorldPoint((int) r.getMinX(), (int) r.getMaxY(), 0);
 
 		if (!isFirstPointCloser(firstWp, secondWp, p3))
 		{
@@ -414,7 +418,13 @@ public class HotColdClue extends ClueScroll implements LocationClueScroll, Locat
 
 	private void markFinalSpot(WorldPoint wp)
 	{
-		this.location = wp;
+		location = wp;
 		reset();
+	}
+
+	@Override
+	public ItemRequirement[] itemRequirements()
+	{
+		return REQUIREMENTS;
 	}
 }

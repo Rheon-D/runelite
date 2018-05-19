@@ -61,7 +61,7 @@ public class AnagramClue extends ClueScroll implements TextClueScroll, NpcClueSc
 		new AnagramClue("This anagram reveals who to speak to next: BAIL TRIMS", "Brimstail", new WorldPoint(2402, 3419, 0), "West of Stronghold Slayer Cave"),
 		new AnagramClue("This anagram reveals who to speak to next: BAKER CLIMB", "Brambickle", new WorldPoint(2783, 3861, 0), "Trollweiss mountain"),
 		new AnagramClue("This anagram reveals who to speak to next: BLUE GRIM GUIDED", "Lumbridge Guide", new WorldPoint(3232, 3232, 0), "Lumbridge"),
-		new AnagramClue("This anagram reveals who to speak to next: BY LOOK", "Bolkoy", new WorldPoint(2529, 3162, 0), "Tree Gnome Village general store", "13"),
+		new AnagramClue("This anagram reveals who to speak to next: BY LOOK", "Bolkoy", new WorldPoint(2529, 3162, 1), "Tree Gnome Village general store", "13"),
 		new AnagramClue("This anagram reveals who to speak to next: CAR IF ICES", "Sacrifice", new WorldPoint(2209, 3056, 0), "Zul-Andra"),
 		new AnagramClue("This anagram reveals who to speak to next: CAREER IN MOON", "Oneiromancer", new WorldPoint(2150, 3866, 0), "Astral altar", "25"),
 		new AnagramClue("This anagram reveals who to speak to next: C ON GAME HOC", "Gnome Coach", new WorldPoint(2395, 3486, 0), "Gnome Ball course", "6"),

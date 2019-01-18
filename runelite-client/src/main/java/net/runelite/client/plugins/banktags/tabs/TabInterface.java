@@ -226,40 +226,60 @@ public class TabInterface
 		}
 
 		List<Integer> items = Arrays.stream(container.getItems())
-			.filter(Objects::nonNull)
-			.map(Item::getId)
-			.filter(id -> id != -1)
-			.collect(Collectors.toList());
+				.filter(Objects::nonNull)
+				.map(Item::getId)
+				.filter(id -> id != -1)
+				.collect(Collectors.toList());
 
 		if (!Strings.isNullOrEmpty(event.getMenuTarget()))
 		{
 			if (activeTab != null && Text.removeTags(event.getMenuTarget()).equals(activeTab.getTag()))
 			{
-				for (Integer item : items)
-				{
-					tagManager.addTag(item, activeTab.getTag(), false);
-				}
-
-				openTag(TAG_SEARCH + activeTab.getTag());
+				checkAndTag(Lists.newArrayList(activeTab.getTag()), items, 0, () -> openTag(TAG_SEARCH + activeTab.getTag()));
 			}
 
 			return;
 		}
 
 		chatboxPanelManager.openTextInput((inventory ? "Inventory " : "Equipment ") + " tags:")
-			.onDone((newTags) ->
-				clientThread.invoke(() ->
+				.onDone((newTags) ->
+						clientThread.invoke(() ->
+						{
+							final List<String> tags = SPLITTER.splitToList(newTags.toLowerCase());
+							checkAndTag(tags, items, 0, () -> updateTabIfActive(tags));
+						}))
+				.build();
+	}
+
+	private void checkAndTag(List<String> tags, List<Integer> items, int index, Runnable onClose)
+	{
+		if (index >= items.size())
+		{
+			clientThread.invoke(onClose);
+			return;
+		}
+
+		ItemComposition composition = itemManager.getItemComposition(items.get(index));
+		chatboxPanelManager.openTextMenuInput(String.format("There are multiple variations of \'%s\'", composition.getName()))
+				.option("1. Add all variations", () ->
 				{
-					final List<String> tags = SPLITTER.splitToList(newTags.toLowerCase());
-
-					for (Integer item : items)
-					{
-						tagManager.addTags(item, tags, false);
-					}
-
-					updateTabIfActive(tags);
-				}))
-			.build();
+					clientThread.invoke(() -> tagManager.addTags(composition.getId(), tags, true));
+					clientThread.invoke(() -> checkAndTag(tags, items, index + 1, onClose));
+				})
+				.option("2. Add this variation", () ->
+				{
+					clientThread.invoke(() -> tagManager.addTags(composition.getId(), tags, false));
+					clientThread.invoke(() -> checkAndTag(tags, items, index + 1, onClose));
+				})
+				.option("3. Skip this item", () ->
+				{
+					clientThread.invoke(() -> checkAndTag(tags, items, index + 1, onClose));
+				})
+				.option("4. Cancel", () ->
+				{
+					checkAndTag(tags, items, Integer.MAX_VALUE, onClose);
+				})
+				.build();
 	}
 
 	private void handleNewTab(ScriptEvent event)

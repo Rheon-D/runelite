@@ -270,6 +270,11 @@ public class ObjectIndicatorsPlugin extends Plugin implements KeyListener
 			return null;
 		}
 
+		if (tile.getDecorativeObject() != null && tile.getDecorativeObject().getId() == id)
+		{
+			return tile.getDecorativeObject();
+		}
+
 		final GameObject[] tileGameObjects = tile.getGameObjects();
 
 		for (GameObject object : tileGameObjects)

@@ -29,6 +29,7 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import javax.inject.Inject;
 import net.runelite.api.Client;
+import net.runelite.api.DecorativeObject;
 import net.runelite.api.GameObject;
 import net.runelite.api.TileObject;
 import net.runelite.client.ui.overlay.Overlay;
@@ -69,6 +70,10 @@ class ObjectIndicatorsOverlay extends Overlay
 			if (object instanceof GameObject)
 			{
 				polygon = ((GameObject) object).getConvexHull();
+			}
+			else if (object instanceof DecorativeObject)
+			{
+				polygon = ((DecorativeObject) object).getConvexHull();
 			}
 			else
 			{
